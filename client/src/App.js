@@ -1,29 +1,50 @@
 import React, { Component } from "react";
 import CommunnEthChannelsContract from "./contracts/CommunnEthChannels.json";
 import getWeb3 from "./getWeb3";
-import { Waku, WakuMessage } from "js-waku";
+import { Waku } from "js-waku";
 
 import "./App.css";
 
-class App extends Component {                                                                              zż
-  state = { web3: null, accounts: null, contract: null };
+class App extends Component {
+  zż;
+  state = { web3: null, accounts: null, contract: null, newChannel: "" };
 
   componentDidMount = async () => {
     try {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
-      this.setState({ web3, accounts, contract: null });
+      const networkId = await web3.eth.net.getId();
+      const deployedNetwork = CommunnEthChannelsContract.networks[networkId];
+      const instance = new web3.eth.Contract(
+        CommunnEthChannelsContract.abi,
+        deployedNetwork && deployedNetwork.address
+      );
+      this.setState({ web3, accounts, contract: instance });
     } catch (error) {
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, accounts, or contract. Check console for details.`
       );
       console.error(error);
     }
   };
 
-  executeContract = async () => {
-    const { accounts, contract } = this.state;
+  createChannel = async () => {
+    const { accounts, contract, newChannel } = this.state;
+    const channelPath = `/communneth/1/${newChannel
+      .toString()
+      .replace(" ", "-")
+      .toLowerCase()}/proto`;
 
+    await contract.methods
+      .createChannel(newChannel, channelPath)
+      .send({ from: accounts[0] });
+  };
+
+  setNewChannel = (event) => {
+    event.preventDefault();
+    const channelName = event.target.value;
+    console.log(channelName);
+    this.state.newChannel = channelName;
   };
 
   render() {
@@ -32,7 +53,18 @@ class App extends Component {                                                   
     }
     return (
       <div className="App">
-        
+        <form action="submit">
+          <input
+            type="text"
+            value={this.state.newChannel}
+            onChange={this.setNewChannel}
+          />
+          <input
+            type="button"
+            value="Create channel"
+            onSubmit={this.createChannel}
+          />
+        </form>
       </div>
     );
   }
