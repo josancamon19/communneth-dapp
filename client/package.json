@@ -15,10 +15,10 @@
     "web3": "^1.6.1"
   },
   "scripts": {
-    "start": "cra-webpack-rewired start",
-    "build": "cra-webpack-rewired build",
-    "test": "cra-webpack-rewired test",
-    "eject": "cra-webpack-rewired eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -26,8 +26,6 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not ie <= 99",
-      "not android <= 4.4.4",
       "not dead",
       "not op_mini all"
     ],
@@ -36,8 +34,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "cra-webpack-rewired": "^1.0.1"
   }
 }
