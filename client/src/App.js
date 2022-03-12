@@ -1,13 +1,38 @@
 import React, { Component } from "react";
 import CommunnEthChannelsContract from "./contracts/CommunnEthChannels.json";
 import getWeb3 from "./getWeb3";
-import { Waku } from "js-waku";
+// import { Waku } from "js-waku";
 
 import "./App.css";
 
 class App extends Component {
-  zż;
-  state = { web3: null, accounts: null, contract: null, newChannel: "" };
+  constructor(props) {
+    super(props);
+    this.state = { web3: null, accounts: null, contract: null, channel: "" };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  createChannel = async () => {
+    const { accounts, contract, channel } = this.state;
+    const channelPath = `/communneth/1/${channel
+      .toString()
+      .replace(" ", "-")
+      .toLowerCase()}/proto`;
+
+    await contract.methods
+      .createChannel(channel, channelPath)
+      .send({ from: accounts[0] });
+  };
+
+  handleChange(event) {
+    this.setState({ channel: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.createChannel();
+  }
 
   componentDidMount = async () => {
     try {
@@ -28,24 +53,6 @@ class App extends Component {
     }
   };
 
-  createChannel = async () => {
-    const { accounts, contract, newChannel } = this.state;
-    const channelPath = `/communneth/1/${newChannel
-      .toString()
-      .replace(" ", "-")
-      .toLowerCase()}/proto`;
-
-    await contract.methods
-      .createChannel(newChannel, channelPath)
-      .send({ from: accounts[0] });
-  };
-
-  setNewChannel = (event) => {
-    event.preventDefault();
-    const channelName = event.target.value;
-    console.log(channelName);
-    this.state.newChannel = channelName;
-  };
 
   render() {
     if (!this.state.web3) {
@@ -53,17 +60,13 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <form action="submit">
+        <form onSubmit={this.handleSubmit}>
           <input
             type="text"
-            value={this.state.newChannel}
-            onChange={this.setNewChannel}
+            value={this.state.channel}
+            onChange={this.handleChange}
           />
-          <input
-            type="button"
-            value="Create channel"
-            onSubmit={this.createChannel}
-          />
+          <input type="submit" value="Create channel" />
         </form>
       </div>
     );
