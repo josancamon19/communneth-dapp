@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <8.10.0;
+pragma experimental ABIEncoderV2;
 
-contract CommunnEthChannels {
+contract CommunEth {
     struct Channel {
         address owner; // creator
         string name; // Name

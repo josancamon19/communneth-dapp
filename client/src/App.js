@@ -1,5 +1,5 @@
 import getWeb3 from "./getWeb3";
-import CommunnEthChannelsContract from "./contracts/CommunnEthChannels.json";
+import CommunEth from "./contracts/CommunEth.json";
 import React, { Component } from "react";
 import protons from "protons";
 import { Waku, WakuMessage } from "js-waku";
@@ -24,25 +24,10 @@ const proto = protons(`
 
     // if type is create poll
     optional string question = 6;
-    optional repeated string answers = 7;
+    repeated string answers = 7;
 
     // if type is vote
-    optional uint8 vote = 8; // idx arr votation
-  }
-
-  message PollInit {
-    bytes owner = 1; // Address of a poll owner/initializer
-    uint64 timestamp = 2; // Timestamp of a waku message
-    string question = 3;// Question of a poll
-    repeated string answers = 4; // Possible answers to poll
-    enum PollType {
-        WEIGHTED = 0;
-        NON_WEIGHTED = 1;
-    }
-    PollType pollType = 5; // type of poll
-    optional bytes minToken = 6; // amount of token needed for NON_WEIGHTED poll to be able to vote
-    uint64 endTime = 7; // UNIX timestamp of poll end
-    bytes signature = 8; // signature of all above fields
+    optional uint64 vote = 8; // idx arr votation
   }
 `);
 
@@ -74,9 +59,9 @@ class App extends Component {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = CommunnEthChannelsContract.networks[networkId];
+      const deployedNetwork = CommunEth.networks[networkId];
       const instance = new web3.eth.Contract(
-        CommunnEthChannelsContract.abi,
+        CommunEth.abi,
         deployedNetwork && deployedNetwork.address
       );
       this.setState({ web3, accounts, contract: instance });
@@ -165,10 +150,14 @@ class App extends Component {
   };
 
   wakuCreatePoll = async () => {
-      // TODO poll is created in web3 then is sent in the message
+    // TODO poll is created in web3 then is sent in the message
 
-      // TODO listen for an event thrown by the creation of the poll?
-      const payload = proto.Message.encode({
+    this.state.contract.methods
+      .createPoll()
+      .send(ContentTopic, "This is the question", ["A", "B", "C", "D"]);
+
+    // TODO listen for an event thrown by the creation of the poll?
+    const payload = proto.Message.encode({
       timestamp: new Date().getTime(),
       sender: this.state.accounts[0],
       messageType: 3,
@@ -189,7 +178,7 @@ class App extends Component {
   wakuGetPoll = async () => {
     // TODO waku get poll (in decode message if )
     // TODO map answers to voting results
-  }
+  };
 
   // ----------------------------------------------------------------
   // ---------------------- ETH Contract calls ----------------------

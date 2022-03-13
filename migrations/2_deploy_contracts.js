@@ -1,5 +1,5 @@
-var CommunnEthChannels = artifacts.require("./CommunnEthChannels.sol");
+var CommunEth = artifacts.require("./CommunEth.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(CommunnEthChannels);
+  deployer.deploy(CommunEth);
 };
