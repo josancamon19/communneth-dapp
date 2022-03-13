@@ -150,20 +150,13 @@ class App extends Component {
   };
 
   wakuCreatePoll = async () => {
-    // TODO poll is created in web3 then is sent in the message
-
-    this.state.contract.methods
-      .createPoll()
-      .send(ContentTopic, "This is the question", ["A", "B", "C", "D"]);
-
+    
     // TODO listen for an event thrown by the creation of the poll?
     const payload = proto.Message.encode({
       timestamp: new Date().getTime(),
       sender: this.state.accounts[0],
       messageType: 3,
       text: "",
-      question: "This is the question",
-      answers: ["A", "B", "C", "D"],
     });
 
     return WakuMessage.fromBytes(payload, ContentTopic).then((wakuMessage) =>
@@ -210,6 +203,13 @@ class App extends Component {
       value: payMessage.amount,
     });
   };
+
+  createPoll = async () => {
+    await this.state.contract.methods
+    .createPoll(ContentTopic, "This is the question", ["A", "B", "C", "D"])
+    .send({ from: this.state.accounts[0] });
+    // poll is created in web3 then is sent in the message
+  }
 
   handleChange(event) {
     this.setState({ channel: event.target.value });
