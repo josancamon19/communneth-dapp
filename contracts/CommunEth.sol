@@ -92,5 +92,5 @@ contract CommunEth {
         returns (address)
     {
         return channels[path].owner;
-    }
+    }   
 }

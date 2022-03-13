@@ -3,6 +3,7 @@ import CommunEth from "./contracts/CommunEth.json";
 import React, { Component } from "react";
 import protons from "protons";
 import { Waku, WakuMessage } from "js-waku";
+import Button from "@mui/material/Button";
 
 import "./App.css";
 
@@ -23,11 +24,10 @@ const proto = protons(`
     optional uint64 amount = 5; // if type is payment
 
     // if type is create poll
-    optional string question = 6;
-    repeated string answers = 7;
+    optional string pollId = 6;
 
     // if type is vote
-    optional uint64 vote = 8; // idx arr votation
+    optional uint64 vote = 7; // idx arr votation
   }
 `);
 
@@ -150,7 +150,6 @@ class App extends Component {
   };
 
   wakuCreatePoll = async () => {
-    
     // TODO listen for an event thrown by the creation of the poll?
     const payload = proto.Message.encode({
       timestamp: new Date().getTime(),
@@ -175,6 +174,7 @@ class App extends Component {
 
   // ----------------------------------------------------------------
   // ---------------------- ETH Contract calls ----------------------
+  // ----------------------------------------------------------------
 
   createChannel = async () => {
     const { accounts, contract, channel } = this.state;
@@ -206,10 +206,15 @@ class App extends Component {
 
   createPoll = async () => {
     await this.state.contract.methods
-    .createPoll(ContentTopic, "This is the question", ["A", "B", "C", "D"])
-    .send({ from: this.state.accounts[0] });
+      .createPoll(ContentTopic, "This is the question", ["A", "B", "C", "D"])
+      .send({ from: this.state.accounts[0] });
     // poll is created in web3 then is sent in the message
-  }
+  };
+
+  listenContractEvents = () => {
+    this.state.contract.events.ChannelCreated().on("data", (event) => {});
+    this.state.contract.events.PollCreated().on("data", (event) => {});
+  };
 
   handleChange(event) {
     this.setState({ channel: event.target.value });
@@ -248,16 +253,25 @@ class App extends Component {
         {/* <PollButton theme={orangeTheme} account={this.state.accounts[0]} />  */}
         {/* signer={signer} */}
         {/* BASIC MESSAGE */}
-        <form onSubmit={this.handleMessageInputSubmit}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            alert("clicked");
+          }}
+        >
+          Login
+        </Button>
+
+        {/* <form onSubmit={this.handleMessageInputSubmit}>
           <input
             type="text"
             value={this.state.message}
             onChange={this.handleMessageInputChange}
           />
           <input type="submit" value="Send message" />
-        </form>
+        </form> */}
         {/* PAYMENT MESSAGE */}
-        <form onSubmit={this.handlePayMessageInputSubmit}>
+        {/* <form onSubmit={this.handlePayMessageInputSubmit}>
           <input
             type="text"
             value={this.state.message}
@@ -269,16 +283,16 @@ class App extends Component {
             onChange={this.handleAmountInputChange}
           />
           <input type="submit" value="Ask payment message" />
-        </form>
+        </form> */}
         {/* CREATE CHANNEL CONTRACT OP */}
-        <form onSubmit={this.handleSubmit}>
+        {/* <form onSubmit={this.handleSubmit}>
           <input
             type="text"
             value={this.state.channel}
             onChange={this.handleChange}
           />
           <input type="submit" value="Create channel" />
-        </form>
+        </form> */}
       </div>
     );
   }
