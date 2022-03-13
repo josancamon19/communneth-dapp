@@ -166,6 +166,8 @@ class App extends Component {
 
   wakuCreatePoll = async () => {
       // TODO poll is created in web3 then is sent in the message
+
+      // TODO listen for an event thrown by the creation of the poll?
       const payload = proto.Message.encode({
       timestamp: new Date().getTime(),
       sender: this.state.accounts[0],
@@ -183,6 +185,11 @@ class App extends Component {
   wakuVotePoll = async () => {
     // TODO: does not use waku, but uses metamask
   };
+
+  wakuGetPoll = async () => {
+    // TODO waku get poll (in decode message if )
+    // TODO map answers to voting results
+  }
 
   // ----------------------------------------------------------------
   // ---------------------- ETH Contract calls ----------------------
