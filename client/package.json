@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@waku/poll-sdk-react-components": "^0.4.0",
+    "@waku/poll-sdk-react-hooks": "^0.4.0",
+    "@waku/vote-poll-sdk-react-components": "^0.4.0",
     "js-waku": "^0.19.1",
     "protons": "^2.0.3",
     "react": "^17.0.2",
