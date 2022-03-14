@@ -54,25 +54,25 @@ class App extends Component {
       this.handlePayMessageInputSubmit.bind(this);
   }
 
-  componentDidMount = async () => {
-    try {
-      const web3 = await getWeb3();
-      const accounts = await web3.eth.getAccounts();
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = CommunEth.networks[networkId];
-      const instance = new web3.eth.Contract(
-        CommunEth.abi,
-        deployedNetwork && deployedNetwork.address
-      );
-      this.setState({ web3, accounts, contract: instance });
-      this.initWaku();
-    } catch (error) {
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
-      console.error(error);
-    }
-  };
+    componentDidMount = async () => {
+      try {
+        const web3 = await getWeb3();
+        const accounts = await web3.eth.getAccounts();
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = CommunEth.networks[networkId];
+        const instance = new web3.eth.Contract(
+          CommunEth.abi,
+          deployedNetwork && deployedNetwork.address
+        );
+        this.setState({ web3, accounts, contract: instance });
+        this.initWaku();
+      } catch (error) {
+        alert(
+          `Failed to load web3, accounts, or contract. Check console for details.`
+        );
+        console.error(error);
+      }
+    };
 
   initWaku = () => {
     Waku.create({ bootstrap: { default: true } }).then((waku) => {
