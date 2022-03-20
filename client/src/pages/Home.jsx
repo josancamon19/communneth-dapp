@@ -1,55 +1,55 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import MessagesList from "../components/messages/MessagesList";
 import NewMessage from "../components/messages/NewMessage";
 import PageTitle from "../components/ui/PageTitle";
+import { proto } from "../utils/ProtoUtils";
 
 function Home(props) {
   const [messages, setMessages] = useState([]);
 
+  useEffect(() => {
+    wakuHistoryMessages();
+  });
+
   function wakuHistoryMessages() {
-    // Load historic messages
     console.log(`Loading historic messages`);
     const callback = (retrievedMessages) => {
-      // this.setState({ messages: [] });
       // let messages =
-      retrievedMessages
-        .map(this.processWakuMessage) // Decode messages
-        .filter(Boolean); // Filter out undefined values
+      retrievedMessages.map(processWakuMessage).filter(Boolean);
     };
-    this.state.waku.store
-      .queryHistory([props.channel], { callback })
-      .catch((e) => {
-        console.log("Failed to retrieve messages from store", e);
-      });
+    props.waku.store.queryHistory([props.channel], { callback }).catch((e) => {
+      console.log("Failed to retrieve messages from store", e);
+    });
   }
 
-  processWakuMessage = (wakuMessage) => {
-    console.log(`Processing message ${wakuMessage}`);
+  function processWakuMessage(wakuMessage) {
     if (!wakuMessage.payload) return;
+
     const { text, timestamp, sender, messageType, amount } =
       proto.Message.decode(wakuMessage.payload);
-    const message = { text, timestamp, sender, messageType, amount };
-    let alreadyExists = this.state.messages.find(
+
+    let alreadyExists = messages.find(
       (msg) =>
-        msg.text === message.text &&
-        msg.timestamp === message.timestamp &&
-        msg.sender === message.sender
+        msg.text === text &&
+        msg.timestamp === timestamp &&
+        msg.sender === sender
     );
+
     console.log(`Message exists ${alreadyExists}`);
+
+    const message = { text, timestamp, sender, messageType, amount };
     if (alreadyExists === null) {
-      this.setState({ messages: [message].concat(this.state.messages) });
-      console.log(this.state.messages);
+      setMessages((prev) => [message].concat(prev));
     }
-  };
+  }
 
   useEffect(() => {
-    this.state.waku.relay.addObserver(this.processWakuMessage, [props.channel]);
+    props.waku.relay.addObserver(processWakuMessage, [props.channel]);
     return function cleanUp() {
-      this.state.waku.relay.deleteObserver(this.processWakuMessage, [
-        this.state.channel,
-      ]);
+      props.waku.relay.deleteObserver(processWakuMessage, [props.channel]);
     };
-  });
+  }, [props.channel]);
 
   return (
     <div>
