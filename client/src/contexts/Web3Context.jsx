@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext } from "react";
 
 import CommunEth from "../contracts/CommunEth.json";
-import getWeb3 from "../getWeb3";
+import getWeb3 from "../utils/getWeb3";
 
 const Web3Context = createContext({
   web3: null,
