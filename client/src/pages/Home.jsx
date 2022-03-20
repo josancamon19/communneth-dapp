@@ -49,6 +49,7 @@ function Home(props) {
     return function cleanUp() {
       props.waku.relay.deleteObserver(processWakuMessage, [props.channel]);
     };
+    // eslint-disable-next-line
   }, [props.channel]);
 
   return (

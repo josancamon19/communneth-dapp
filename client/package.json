@@ -31,5 +31,8 @@
       "not dead",
       "not op_mini all"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^1.7.0"
   }
 }
