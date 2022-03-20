@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import WakuContext from "../contexts/WakuContext";
 import { proto } from "../utils/ProtoUtils";
 
-export function useWakuMessagesHook(waku, channel) {
+export function useWakuMessagesHook(channel) {
   const [messages, setMessages] = useState([]);
+  const waku = useContext(WakuContext);
+
   useEffect(() => {
     wakuHistoryMessages();
   });

@@ -8,11 +8,8 @@ function Login() {
     console.log(channel);
     // TODO use router way of params
   }, []);
-  return (
-    <div>
-      <Button>Test Button</Button>
-    </div>
-  );
+
+  return <Button>Test Button</Button>;
 }
 
 export default Login;

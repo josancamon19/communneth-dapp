@@ -7,13 +7,12 @@ import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
 
 function Home(props) {
   const messages = useWakuMessagesHook(props.channel);
-
   return (
-    <div>
+    <>
       <PageTitle title={`Channel ${props.channel}`} />
       <MessagesList messages={messages} />
       <NewMessage messages={messages} />
-    </div>
+    </>
   );
 }
 

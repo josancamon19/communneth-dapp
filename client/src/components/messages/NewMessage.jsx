@@ -21,7 +21,7 @@ function NewMessage(props) {
   }
 
   return (
-    <div>
+    <>
       <TextField
         id="outlined-basic"
         label="New message"
@@ -35,7 +35,7 @@ function NewMessage(props) {
       <Button onClick={sendMessage} variant="contained">
         Send
       </Button>
-    </div>
+    </>
   );
 }
 

@@ -22,7 +22,7 @@ function NewChannel(props) {
   }
 
   return (
-    <div>
+    <>
       <Typography variant="h3" component="h3">
         Create a channel
       </Typography>
@@ -39,7 +39,7 @@ function NewChannel(props) {
       <Button onClick={createChannel} variant="contained">
         Create
       </Button>
-    </div>
+    </>
   );
 }
 
