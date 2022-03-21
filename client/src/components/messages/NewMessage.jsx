@@ -1,12 +1,14 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
+// import { Button, TextField } from "@mui/material";
+import React, { useContext } from "react";
 import { proto } from "../../utils/ProtoUtils";
 import { WakuMessage } from "js-waku";
+import { Formik } from "formik";
+import WakuContext from "../../contexts/WakuContext";
 
 function NewMessage(props) {
-  const [message, setMessage] = useState("");
+  const wakuContext = useContext(WakuContext);
 
-  async function sendMessage() {
+  async function sendMessage(message) {
     const data = {
       timestamp: new Date().getTime(),
       text: message,
@@ -16,25 +18,51 @@ function NewMessage(props) {
 
     const payload = proto.Message.encode(data);
     const msg = await WakuMessage.fromBytes(payload, props.channel);
-    await props.waku.relay.send(msg);
-    props.wakuHistoryMessages();
+    await wakuContext.waku.relay.send(msg);
   }
 
   return (
     <>
-      <TextField
-        id="outlined-basic"
-        label="New message"
-        variant="outlined"
-        value={message}
-        onChange={(e) => {
-          e.preventDefault();
-          setMessage(e.target.value);
+      <Formik
+        initialValues={{ message: "" }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.message) {
+            errors.message = "Required";
+          }
+          return errors;
         }}
-      />
-      <Button onClick={sendMessage} variant="contained">
-        Send
-      </Button>
+        onSubmit={(values, { setSubmitting }) => {
+          console.log(values);
+          sendMessage(values.message);
+          setSubmitting(false);
+        }}
+      >
+        {/* https://formik.org/docs/overview */}
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <input
+              type="message"
+              name="message"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.message}
+            />
+            {errors.message && touched.message && errors.message}
+            <button type="submit" disabled={isSubmitting}>
+              Submit
+            </button>
+          </form>
+        )}
+      </Formik>
     </>
   );
 }

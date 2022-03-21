@@ -12,9 +12,9 @@ function App() {
       <WakuContextProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={Login} />
-            <Route path="/home" element={Home} />
-            <Route path="/new-channel" element={NewChannel} />
+            <Route path="/" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/new-channel" element={<NewChannel />} />
             <Route
               path="*"
               element={

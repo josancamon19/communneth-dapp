@@ -4,18 +4,19 @@ import { proto } from "../utils/ProtoUtils";
 
 export function useWakuMessagesHook(channel) {
   const [messages, setMessages] = useState([]);
-  const waku = useContext(WakuContext);
-
+  const wakuContext = useContext(WakuContext);
+  console.log(wakuContext);
+  
   useEffect(() => {
     wakuHistoryMessages();
-  });
+  }, []);
 
   function wakuHistoryMessages() {
     const callback = (retrievedMessages) => {
       // let messages =
       retrievedMessages.map(processWakuMessage).filter(Boolean);
     };
-    waku.store.queryHistory([channel], { callback }).catch((e) => {
+    wakuContext.waku.store.queryHistory([channel], { callback }).catch((e) => {
       console.log("Failed to retrieve messages from store", e);
     });
   }
@@ -42,9 +43,9 @@ export function useWakuMessagesHook(channel) {
   }
 
   useEffect(() => {
-    waku.relay.addObserver(processWakuMessage, [channel]);
+    wakuContext.waku.relay.addObserver(processWakuMessage, [channel]);
     return function cleanUp() {
-      waku.relay.deleteObserver(processWakuMessage, [channel]);
+      wakuContext.waku.relay.deleteObserver(processWakuMessage, [channel]);
     };
     // eslint-disable-next-line
   }, [channel]);

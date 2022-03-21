@@ -3,10 +3,12 @@ import React from "react";
 import MessagesList from "../components/messages/MessagesList";
 import NewMessage from "../components/messages/NewMessage";
 import PageTitle from "../components/ui/PageTitle";
-import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
+// import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
 
 function Home(props) {
-  const messages = useWakuMessagesHook(props.channel);
+  let messages = [];
+  // let messages = useWakuMessagesHook(props.channel);
+
   return (
     <>
       <PageTitle title={`Channel ${props.channel}`} />
