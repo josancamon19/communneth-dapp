@@ -26,36 +26,55 @@ function NewMessage(props) {
 
   return (
     <Container>
-      <Box
-        component="form"
-        onSubmit={(event) => {}}
-        noValidate
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+      <Formik
+        initialValues={{ message: "" }}
+        validate={(values) => {
+          const errors = {};
+          if (values.message === "") {
+            errors.message = "What's the message? 🤔 ";
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          console.log(values);
+
+          setSubmitting(false);
         }}
       >
-        <TextField
-          id="message"
-          name="message"
-          label="Message"
-          variant="outlined"
-          required
-          fullWidth
-          size="small"
-          onChange={(e) => {
-            e.preventDefault();
-          }}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          endIcon={<SendRounded />}
-          size="large"
-        ></Button>
-      </Box>
+        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="message"
+              name="message"
+              label="Message"
+              variant="outlined"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.channel}
+              required
+              fullWidth
+              size="small"
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isSubmitting}
+              endIcon={<SendRounded />}
+              size="large"
+            ></Button>
+          </Box>
+        )}
+      </Formik>
     </Container>
   );
 }

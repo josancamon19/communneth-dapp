@@ -40,9 +40,9 @@ function NewChannel(props) {
 
     console.log(`Creating channel ${channel}`);
     await web3Context.contract.methods
-    .createChannel(channel, channelPath)
-    .send({ from: web3Context.accounts[0] });
-    
+      .createChannel(channel, channelPath)
+      .send({ from: web3Context.accounts[0] });
+
     setCreatedChannel(channel);
     // navigate("/home");
 
@@ -68,12 +68,12 @@ function NewChannel(props) {
             const errors = {};
             if (values.channel === "") {
               errors.channel = "Channel field required";
-            } 
+            }
             return errors;
           }}
           onSubmit={(values, { setSubmitting }) => {
             console.log(values);
-            createChannel(values.channel)
+            createChannel(values.channel);
             setSubmitting(false);
           }}
         >

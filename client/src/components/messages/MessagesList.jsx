@@ -6,9 +6,9 @@ import MessageItemPoll from "./MessageItemPoll";
 function MessagesList(props) {
   const messages = props.messages.map((message) =>
     message.type === "basic" ? (
-      <MessageItem message={message} />
+      <MessageItem message={message} key={message.id} />
     ) : (
-      <MessageItemPoll message={message} />
+      <MessageItemPoll message={message} key={message.id} />
     )
   );
   return (
