@@ -1,11 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import Web3Context from "../contexts/Web3Context";
-import { Button, TextField, Typography, Container } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Grid,
+  Link,
+} from "@mui/material";
 import { Box } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 function NewChannel(props) {
   const [newChannel, setNewChannel] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const web3Context = useContext(Web3Context);
 
@@ -35,7 +44,8 @@ function NewChannel(props) {
       .send({ from: web3Context.accounts[0] });
 
     setNewChannel("");
-    
+    navigate("/home");
+
     // TODO: show waiting for completion
   }
 
@@ -81,6 +91,13 @@ function NewChannel(props) {
           >
             Create
           </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="/home" variant="body2">
+                Go to home
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
       </Box>
     </Container>

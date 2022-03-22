@@ -9,7 +9,7 @@ function MessageItem(props) {
         alignItems="flex-start"
       >
         <ListItemText
-          primary={props.message.sender}
+          primary={`${props.message.sender.substring(0,10)}`}
           secondary={<React.Fragment>{props.message.text}</React.Fragment>}
         />
       </ListItem>

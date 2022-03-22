@@ -4,6 +4,9 @@ import { proto } from "../../utils/ProtoUtils";
 import { WakuMessage } from "js-waku";
 import { Formik } from "formik";
 import WakuContext from "../../contexts/WakuContext";
+import { Button, Container, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import SendRounded from "@mui/icons-material/SendRounded";
 
 function NewMessage(props) {
   const wakuContext = useContext(WakuContext);
@@ -22,48 +25,38 @@ function NewMessage(props) {
   }
 
   return (
-    <>
-      <Formik
-        initialValues={{ message: "" }}
-        validate={(values) => {
-          const errors = {};
-          if (!values.message) {
-            errors.message = "Required";
-          }
-          return errors;
-        }}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
-          sendMessage(values.message);
-          setSubmitting(false);
+    <Container>
+      <Box
+        component="form"
+        onSubmit={(event) => {}}
+        noValidate
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
         }}
       >
-        {/* https://formik.org/docs/overview */}
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <input
-              type="message"
-              name="message"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.message}
-            />
-            {errors.message && touched.message && errors.message}
-            <button type="submit" disabled={isSubmitting}>
-              Submit
-            </button>
-          </form>
-        )}
-      </Formik>
-    </>
+        <TextField
+          id="message"
+          name="message"
+          label="Message"
+          variant="outlined"
+          required
+          fullWidth
+          size="small"
+          onChange={(e) => {
+            e.preventDefault();
+          }}
+        />
+        <Button
+          variant="contained"
+          type="submit"
+          endIcon={<SendRounded />}
+          size="large"
+        ></Button>
+      </Box>
+    </Container>
   );
 }
 
