@@ -11,11 +11,7 @@ import {
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import {
-  saveChannel,
-  getSavedChannel,
-  removeSavedChannel,
-} from "../utils/ChannelPersistance";
+import { saveChannel } from "../utils/ChannelPersistance";
 
 function NewChannel(props) {
   const [createdChannel, setCreatedChannel] = useState("");

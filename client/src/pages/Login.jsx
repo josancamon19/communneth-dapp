@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -11,10 +11,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Formik } from "formik";
+import Web3Context from "../contexts/Web3Context";
 import { saveChannel, getSavedChannel } from "../utils/ChannelPersistance";
 
 function Login() {
   const navigate = useNavigate();
+  const web3Context = useContext(Web3Context);
 
   useEffect(() => {
     if (getSavedChannel() !== null) {
@@ -23,10 +25,23 @@ function Login() {
   }, []);
 
   async function handleSignIn(channel, password) {
-    // TODO go to contract and find channel matches password
-    // TODO if so,
-    saveChannel(channel);
-    navigate("/home");
+    console.log(
+      `Authenticating with channel: '${channel}' and password '${password}'`
+    );
+    await web3Context.contract.methods
+      .matchesCredentials(channel, password)
+      .call({ from: web3Context.accounts[0] }, (err, result) => {
+        if (err !== null) {
+          // Show err
+          return;
+        } else if (!result) {
+          // Password not matching
+          return;
+        }
+        saveChannel(channel);
+        navigate("/home");
+      });
+    // communeth/1/conjunto1/proto
   }
 
   return (
@@ -44,7 +59,10 @@ function Login() {
           Sign in
         </Typography>
         <Formik
-          initialValues={{ channel: "", password: "" }}
+          initialValues={{
+            channel: "/communneth/1/conjunto1/proto",
+            password: "123",
+          }}
           validate={(values) => {
             const errors = {};
             if (values.channel === "") {
@@ -54,7 +72,7 @@ function Login() {
               errors.password = "Password field required";
             }
             if (errors.channel === undefined) {
-              if (values.channel.split("/").length !== 4) {
+              if (values.channel.split("/").length !== 5) {
                 errors.channel = "Invalid channel value";
               }
             }
@@ -83,7 +101,7 @@ function Login() {
             >
               <TextField
                 margin="normal"
-                placeholder="communeth/1/conjuntoloscerezos/proto"
+                placeholder="/communneth/1/conjunto1/proto"
                 id="channel"
                 label="Channel"
                 name="channel"

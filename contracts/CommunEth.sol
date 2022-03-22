@@ -95,4 +95,16 @@ contract CommunEth {
     {
         return channels[path].owner;
     }
+
+    function matchesCredentials(string memory path, string memory password)
+        public
+        view
+        channelExists(path)
+        returns (bool)
+    {
+        require(bytes(password).length > 0, "Invalid password");
+        return
+            keccak256(bytes(password)) ==
+            keccak256(bytes(channels[path].password));
+    }
 }
