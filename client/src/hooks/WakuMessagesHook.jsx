@@ -6,10 +6,11 @@ export function useWakuMessagesHook(channel) {
   const [messages, setMessages] = useState([]);
   const wakuContext = useContext(WakuContext);
   console.log(wakuContext);
-  
+
   useEffect(() => {
+    if (!wakuContext.ready) return;
     wakuHistoryMessages();
-  }, []);
+  }, [wakuContext.ready]);
 
   function wakuHistoryMessages() {
     const callback = (retrievedMessages) => {

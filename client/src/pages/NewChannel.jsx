@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
 
 function NewChannel(props) {
-  const [newChannel, setNewChannel] = useState("");
-  const [password, setPassword] = useState("");
+  const [createdChannel, setCreatedChannel] = useState("");
   const navigate = useNavigate();
 
   const web3Context = useContext(Web3Context);
@@ -23,28 +23,28 @@ function NewChannel(props) {
     web3Context.contract.events.ChannelCreated().on("data", (event) => {
       const data = event.returnValues;
       console.log(data);
-      console.log(newChannel);
-      if (data.name === newChannel) {
+      console.log(createdChannel);
+      if (data.name === createdChannel) {
         console.log(`Channel created -> send me to home`);
       }
     });
   }, [web3Context.contract]);
 
-  async function createChannel() {
-    if (newChannel === "") return;
+  async function createChannel(channel) {
+    if (channel === "") return;
 
-    const channelPath = `/communneth/1/${newChannel
+    const channelPath = `/communneth/1/${channel
       .toString()
       .replace(" ", "-")
       .toLowerCase()}/proto`;
 
-    console.log(`Creating channel ${channelPath}`);
+    console.log(`Creating channel ${channel}`);
     await web3Context.contract.methods
-      .createChannel(newChannel, channelPath)
-      .send({ from: web3Context.accounts[0] });
-
-    setNewChannel("");
-    navigate("/home");
+    .createChannel(channel, channelPath)
+    .send({ from: web3Context.accounts[0] });
+    
+    setCreatedChannel(channel);
+    // navigate("/home");
 
     // TODO: show waiting for completion
   }
@@ -62,43 +62,70 @@ function NewChannel(props) {
         <Typography variant="h5" component="h1">
           Create a channel
         </Typography>
-        <Box
-          component="form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            createChannel();
+        <Formik
+          initialValues={{ channel: "" }}
+          validate={(values) => {
+            const errors = {};
+            if (values.channel === "") {
+              errors.channel = "Channel field required";
+            } 
+            return errors;
           }}
-          noValidate
-          sx={{ mt: 3 }}
+          onSubmit={(values, { setSubmitting }) => {
+            console.log(values);
+            createChannel(values.channel)
+            setSubmitting(false);
+          }}
         >
-          <TextField
-            id="outlined-basic"
-            label="Channel name"
-            variant="outlined"
-            value={newChannel}
-            required
-            fullWidth
-            onChange={(e) => {
-              e.preventDefault();
-              setNewChannel(e.target.value);
-            }}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            fullWidth
-            sx={{ mt: 2, mb: 2 }}
-          >
-            Create
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/home" variant="body2">
-                Go to home
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+          }) => (
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 3 }}
+            >
+              <TextField
+                id="channel"
+                name="channel"
+                label="Channel name"
+                variant="outlined"
+                placeholder="Conjunto los cerezos"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.channel}
+                fullWidth
+                autoFocus
+                required
+              />
+              {errors.channel && touched.channel && errors.channel}
+
+              <Button
+                variant="contained"
+                type="submit"
+                fullWidth
+                disabled={isSubmitting}
+                sx={{ mt: 2, mb: 2 }}
+              >
+                Create
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="/home" variant="body2">
+                    Go to home
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+        </Formik>
       </Box>
     </Container>
   );
