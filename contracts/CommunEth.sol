@@ -7,6 +7,7 @@ contract CommunEth {
         address owner; // creator
         string name; // Name
         string path; // waku topic format
+        string password;
     }
 
     struct Poll {
@@ -36,11 +37,12 @@ contract CommunEth {
         _;
     }
 
-    function createChannel(string memory name, string memory path)
-        public
-        channelDoesNotExists(path)
-    {
-        channels[path] = Channel(msg.sender, name, path);
+    function createChannel(
+        string memory name,
+        string memory path,
+        string memory password
+    ) public channelDoesNotExists(path) {
+        channels[path] = Channel(msg.sender, name, path, password);
         emit ChannelCreated(path, name, msg.sender);
     }
 
@@ -92,5 +94,5 @@ contract CommunEth {
         returns (address)
     {
         return channels[path].owner;
-    }   
+    }
 }

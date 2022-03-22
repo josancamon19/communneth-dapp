@@ -10,17 +10,24 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
-import { Formik, ErrorMessage } from "formik";
+import { Formik } from "formik";
+import { saveChannel, getSavedChannel } from "../utils/ChannelPersistance";
 
 function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const channel = queryParams.get("channel");
-    console.log(channel);
-    // TODO use router way of params
+    if (getSavedChannel() !== null) {
+      // navigate("/home");
+    }
   }, []);
+
+  async function handleSignIn(channel, password) {
+    // TODO go to contract and find channel matches password
+    // TODO if so,
+    saveChannel(channel);
+    navigate("/home");
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -54,12 +61,8 @@ function Login() {
 
             return errors;
           }}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            // TODO go to contract and find channel matches password
-            // TODO if so, 
-            // - save in local storage using store.js
-            // - go to home
+          onSubmit={async (values, { setSubmitting }) => {
+            await handleSignIn(values.channel, values.password);
             setSubmitting(false);
           }}
         >

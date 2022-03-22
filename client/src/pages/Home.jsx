@@ -1,13 +1,20 @@
 import { Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import MessagesList from "../components/messages/MessagesList";
 import NewMessage from "../components/messages/NewMessage";
 import PageTitle from "../components/ui/PageTitle";
 // import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
+import {
+  saveChannel,
+  getSavedChannel,
+  removeSavedChannel,
+} from "../utils/ChannelPersistance";
 
 function Home(props) {
+  const navigate = useNavigate();
   let messages = [
     {
       id: 1,
@@ -48,6 +55,12 @@ function Home(props) {
     },
   ];
   // let messages = useWakuMessagesHook(props.channel);
+
+  useEffect(() => {
+    if (getSavedChannel() === null) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
