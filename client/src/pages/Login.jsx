@@ -24,6 +24,18 @@ function Login() {
     }
   }, []);
 
+  /**
+   * DISCLAIMER: of course this is not going to work. Blockchain is public thus passwording does not work.
+   * Options:
+   * - Handling a list (admin managed or voting managed) of users allowed in it
+   * - Using zkSnarks for proving the password?
+   *
+   * What this method does?
+   * -> Basically goes to the contract and checks credentials,
+   *    if valid, saves them, finally navigates to home
+   * @param {string} channel
+   * @param {string} password
+   */
   async function handleSignIn(channel, password) {
     console.log(
       `Authenticating with channel: '${channel}' and password '${password}'`
