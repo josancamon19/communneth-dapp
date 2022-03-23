@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, Grid, Link } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,10 @@ import NewMessage from "../components/messages/NewMessage";
 import PageTitle from "../components/ui/PageTitle";
 import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
 
-import { getSavedChannel } from "../utils/ChannelPersistance";
+import {
+  getSavedChannel,
+  removeSavedChannel,
+} from "../utils/ChannelPersistance";
 
 function Home(props) {
   const navigate = useNavigate();
@@ -72,6 +75,26 @@ function Home(props) {
         <PageTitle title={`Channel ${props.channel ?? "Test"}`} />
         <MessagesList messages={messages} />
         <NewMessage messages={messages} />
+        <Grid container>
+          <Grid item xs>
+            <Link
+              // href="/"
+              variant="body2"
+              onClick={() => {
+                // remove store channel
+                removeSavedChannel();
+                // go back home
+                navigate("/");
+              }}
+              sx={{
+                marginTop: 4,
+                color: "red",
+              }}
+            >
+              Logout
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
     </Container>
   );
