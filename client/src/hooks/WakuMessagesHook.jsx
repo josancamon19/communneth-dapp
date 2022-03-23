@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import WakuContext from "../contexts/WakuContext";
+import { getSavedChannel } from "../utils/ChannelPersistance";
 import { proto } from "../utils/ProtoUtils";
 
-export function useWakuMessagesHook(channel) {
+export function useWakuMessagesHook() {
   const [messages, setMessages] = useState([]);
   const wakuContext = useContext(WakuContext);
+
+  const channel = getSavedChannel();
 
   useEffect(() => {
     if (wakuContext.waku === null) return;

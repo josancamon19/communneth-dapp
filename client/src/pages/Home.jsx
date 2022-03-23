@@ -51,7 +51,7 @@ function Home(props) {
   //     options: ["Buy it now", "Start recollect", "Pay from reserves"],
   //   },
   // ];
-  let messages = useWakuMessagesHook(props.channel);
+  let messages = useWakuMessagesHook();
 
   useEffect(() => {
     if (getSavedChannel() === null) {
@@ -69,7 +69,6 @@ function Home(props) {
           alignItems: "center",
         }}
       >
-
         <PageTitle title={`Channel ${props.channel ?? "Test"}`} />
         <MessagesList messages={messages} />
         <NewMessage messages={messages} />
