@@ -69,7 +69,8 @@ function Home(props) {
           alignItems: "center",
         }}
       >
-        <PageTitle title={`Channel ${props.channel}`} />
+
+        <PageTitle title={`Channel ${props.channel ?? "Test"}`} />
         <MessagesList messages={messages} />
         <NewMessage messages={messages} />
       </Box>
