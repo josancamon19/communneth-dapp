@@ -5,12 +5,19 @@ import { proto } from "../utils/ProtoUtils";
 export function useWakuMessagesHook(channel) {
   const [messages, setMessages] = useState([]);
   const wakuContext = useContext(WakuContext);
-  console.log(wakuContext);
 
   useEffect(() => {
-    if (!wakuContext.ready) return;
+    if (wakuContext.waku === null) return;
     wakuHistoryMessages();
-  }, [wakuContext.ready]);
+  }, [wakuContext.waku]);
+
+  useEffect(() => {
+    if (wakuContext.waku === null) return;
+    wakuContext.waku.relay.addObserver(processWakuMessage, [channel]);
+    return function cleanUp() {
+      wakuContext.waku.relay.deleteObserver(processWakuMessage, [channel]);
+    };
+  }, [wakuContext.waku, channel]);
 
   function wakuHistoryMessages() {
     const callback = (retrievedMessages) => {
@@ -42,14 +49,6 @@ export function useWakuMessagesHook(channel) {
       setMessages((prev) => [message].concat(prev));
     }
   }
-
-  useEffect(() => {
-    wakuContext.waku.relay.addObserver(processWakuMessage, [channel]);
-    return function cleanUp() {
-      wakuContext.waku.relay.deleteObserver(processWakuMessage, [channel]);
-    };
-    // eslint-disable-next-line
-  }, [channel]);
 
   return messages;
 }

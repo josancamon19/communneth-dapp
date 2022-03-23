@@ -54,10 +54,10 @@ function NewChannel(props) {
       .toLowerCase()}/proto`;
 
     console.log(`Creating channel ${channel}`);
-    setCreatedChannel(_ => channel);
+    setCreatedChannel(channel);
     console.log(createdChannel);
     // TODO why created channel not being saved here?
-    
+
     await web3Context.contract.methods
       .createChannel(channel, channelPath, password)
       .send({ from: web3Context.accounts[0] });
