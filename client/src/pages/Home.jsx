@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +7,8 @@ import MessagesList from "../components/messages/MessagesList";
 import NewMessage from "../components/messages/NewMessage";
 import PageTitle from "../components/ui/PageTitle";
 // import { useWakuMessagesHook } from "../hooks/WakuMessagesHook";
-import {
-  saveChannel,
-  getSavedChannel,
-  removeSavedChannel,
-} from "../utils/ChannelPersistance";
+
+import { getSavedChannel } from "../utils/ChannelPersistance";
 
 function Home(props) {
   const navigate = useNavigate();

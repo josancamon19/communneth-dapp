@@ -4,18 +4,20 @@ import { proto } from "../../utils/ProtoUtils";
 import { WakuMessage } from "js-waku";
 import { Formik } from "formik";
 import WakuContext from "../../contexts/WakuContext";
-import { Button, Container, TextField, Typography } from "@mui/material";
+import Web3Context from "../../contexts/Web3Context";
+import { Button, Container, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import SendRounded from "@mui/icons-material/SendRounded";
 
 function NewMessage(props) {
   const wakuContext = useContext(WakuContext);
+  const web3Context = useContext(Web3Context);
 
   async function sendMessage(message) {
     const data = {
       timestamp: new Date().getTime(),
       text: message,
-      sender: props.accounts[0],
+      sender: web3Context.accounts[0],
       messageType: 0,
     };
 
@@ -23,6 +25,9 @@ function NewMessage(props) {
     const msg = await WakuMessage.fromBytes(payload, props.channel);
     await wakuContext.waku.relay.send(msg);
   }
+
+  // TODO send poll message
+  // TODO send payment request message
 
   return (
     <Container>
@@ -37,7 +42,7 @@ function NewMessage(props) {
         }}
         onSubmit={(values, { setSubmitting }) => {
           console.log(values);
-
+          sendMessage(values.message);
           setSubmitting(false);
         }}
       >
@@ -60,7 +65,7 @@ function NewMessage(props) {
               variant="outlined"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.channel}
+              value={values.message}
               required
               fullWidth
               size="small"
