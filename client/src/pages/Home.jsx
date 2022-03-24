@@ -54,7 +54,7 @@ function Home(props) {
   //     options: ["Buy it now", "Start recollect", "Pay from reserves"],
   //   },
   // ];
-  let messages = useWakuMessagesHook();
+  let [messages, wakuHistoryMessages] = useWakuMessagesHook();
 
   useEffect(() => {
     if (getSavedChannel() === null) {
@@ -74,7 +74,7 @@ function Home(props) {
       >
         <PageTitle title={`Channel ${props.channel ?? "Test"}`} />
         <MessagesList messages={messages} />
-        <NewMessage messages={messages} />
+        <NewMessage reloadMessages={wakuHistoryMessages} />
         <Grid container>
           <Grid item xs>
             <Link

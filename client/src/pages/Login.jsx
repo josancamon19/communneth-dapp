@@ -20,7 +20,7 @@ function Login() {
 
   useEffect(() => {
     if (getSavedChannel() !== null) {
-      // navigate("/home");
+      navigate("/home");
     }
   }, []);
 

@@ -147,7 +147,12 @@ function NewChannel(props) {
               >
                 Create
               </Button>
-              <Grid container>
+              <Grid
+                container
+                sx={{
+                  display: "none",
+                }}
+              >
                 <Grid item xs>
                   <Link href="/home" variant="body2">
                     Go to home

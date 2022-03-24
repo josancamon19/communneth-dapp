@@ -45,13 +45,12 @@ export function useWakuMessagesHook() {
         msg.sender === sender
     );
 
-    console.log(`Message exists ${alreadyExists}`);
-
     const message = { text, timestamp, sender, messageType, amount };
-    if (alreadyExists === null) {
+    console.log(message);
+    if (alreadyExists === undefined) {
       setMessages((prev) => [message].concat(prev));
     }
   }
 
-  return messages;
+  return [messages, wakuHistoryMessages];
 }

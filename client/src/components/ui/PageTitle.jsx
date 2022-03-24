@@ -25,7 +25,7 @@ function PageTitle(props) {
         onClick={(e) => {
           e.preventDefault();
           const channel = getSavedChannel();
-          // TODO do whatsapp operation for sending channel link to user
+          // TODO do whatsapp open for sending channel link to user
           // URL?
         }}
       >

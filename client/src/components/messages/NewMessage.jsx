@@ -8,6 +8,7 @@ import Web3Context from "../../contexts/Web3Context";
 import { Button, Container, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import SendRounded from "@mui/icons-material/SendRounded";
+import { getSavedChannel } from "../../utils/ChannelPersistance";
 
 function NewMessage(props) {
   const wakuContext = useContext(WakuContext);
@@ -22,7 +23,7 @@ function NewMessage(props) {
     };
 
     const payload = proto.Message.encode(data);
-    const msg = await WakuMessage.fromBytes(payload, props.channel);
+    const msg = await WakuMessage.fromBytes(payload, getSavedChannel());
     await wakuContext.waku.relay.send(msg);
   }
 
@@ -40,10 +41,11 @@ function NewMessage(props) {
           }
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
-          sendMessage(values.message);
+        onSubmit={async (values, { setSubmitting, setValues }) => {
+          await sendMessage(values.message);
           setSubmitting(false);
+          setValues({ message: "" });
+          props.reloadMessages();
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
@@ -76,7 +78,7 @@ function NewMessage(props) {
               disabled={isSubmitting}
               endIcon={<SendRounded />}
               size="large"
-            ></Button>
+            />
           </Box>
         )}
       </Formik>

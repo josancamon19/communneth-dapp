@@ -17,8 +17,8 @@ export function WakuContextProvider(props) {
 
   useEffect(() => {
     Waku.create({ bootstrap: { default: true } }).then(async (waku) => {
-      setWaku(waku);
       await waku.waitForRemotePeer();
+      setWaku(waku);
       setReady(true);
       console.log(`Status ~ Ready`);
     });
