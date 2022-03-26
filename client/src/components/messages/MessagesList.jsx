@@ -16,6 +16,7 @@ function MessagesList(props) {
       <Container />
     )
   );
+  messages.reverse();
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       {messages}

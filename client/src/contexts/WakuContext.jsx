@@ -16,7 +16,17 @@ export function WakuContextProvider(props) {
   };
 
   useEffect(() => {
-    Waku.create({ bootstrap: { default: true } }).then(async (waku) => {
+    Waku.create({
+      libp2p: {
+        config: {
+          pubsub: {
+            enabled: true,
+            emitSelf: true,
+          },
+        },
+      },
+      bootstrap: { default: true },
+    }).then(async (waku) => {
       await waku.waitForRemotePeer();
       setWaku(waku);
       setReady(true);

@@ -45,7 +45,7 @@ function NewMessage(props) {
           await sendMessage(values.message);
           setSubmitting(false);
           setValues({ message: "" });
-          props.reloadMessages();
+          // props.reloadMessages();
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
