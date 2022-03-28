@@ -2,7 +2,7 @@ import Web3 from "web3";
 declare const window: any;
 
 const getWeb3 = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve: (web3: Web3) => any, reject) => {
     // Wait for loading completion to avoid race conditions with web3 injection timing.
     window.addEventListener("load", async () => {
       // Modern dapp browsers...
