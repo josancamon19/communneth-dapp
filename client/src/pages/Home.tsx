@@ -20,12 +20,13 @@ import {
 function Home() {
   // { channel }: Props
   const navigate = useNavigate();
-  let [messages, wakuHistoryMessages] = useWakuMessagesHook();
+  let messages = useWakuMessagesHook();
 
   useEffect(() => {
     if (getSavedChannel() === null) {
       navigate("/");
     }
+    //eslint-disable-next-line
   }, []);
   const channel = getSavedChannel();
   return (
@@ -39,8 +40,8 @@ function Home() {
         }}
       >
         <PageTitle title={`Channel ${channel ?? "Test"}`} />
-        <MessagesList messages={messages} />
-        <NewMessage reloadMessages={wakuHistoryMessages} />
+        <MessagesList messagesData={messages} />
+        <NewMessage />
         <Grid container>
           <Grid item xs>
             <Link

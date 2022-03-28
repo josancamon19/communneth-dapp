@@ -12,6 +12,7 @@ import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { saveChannel } from "../utils/ChannelPersistance";
+import { EventData } from "web3-eth-contract";
 
 function NewChannel() {
   const [createdChannel] = useState("");
@@ -25,14 +26,17 @@ function NewChannel() {
   useEffect(() => {
     if (web3Context.contract === null) return;
 
-    web3Context.contract.events.ChannelCreated().on("data", (event) => {
-      console.log(`createdChannel ${createdChannel}`);
-      console.log(event.returnValues);
-      if (event.returnValues.name === createdChannel) {
-        saveChannel(createdChannel);
-        navigate("/home");
-      }
-    });
+    web3Context.contract.events
+      .ChannelCreated()
+      .on("data", (event: EventData) => {
+        console.log(`createdChannel ${createdChannel}`);
+        console.log(event.returnValues);
+        if (event.returnValues.name === createdChannel) {
+          saveChannel(createdChannel);
+          navigate("/home");
+        }
+      });
+    // eslint-disable-next-line
   }, [web3Context.contract]);
 
   /**
@@ -45,7 +49,7 @@ function NewChannel() {
    * @param {string} password
    * @returns null
    */
-  async function createChannel(channel, password) {
+  async function createChannel(channel: string, password: string) {
     if (channel === "") return;
 
     const channelPath = `/communneth/1/${channel
@@ -78,7 +82,7 @@ function NewChannel() {
         <Formik
           initialValues={{ channel: "", password: "" }}
           validate={(values) => {
-            const errors = {};
+            const errors = { channel: "", password: "" };
             if (values.channel === "") {
               errors.channel = "Channel field required";
             }

@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
-import { Message, MessageProps } from "../../models/Messages";
+import { MessageProps } from "../../models/Messages";
 
 function MessageItemPoll({ message, isSender }: MessageProps) {
   const options = message.options.map((item: string) => {
@@ -10,6 +10,8 @@ function MessageItemPoll({ message, isSender }: MessageProps) {
         key={item}
         onClick={() => {
           console.log(`Click ${item}`);
+          console.log(isSender);
+
           // TODO execute tx for saving response
         }}
       >

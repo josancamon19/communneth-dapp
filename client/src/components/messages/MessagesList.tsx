@@ -6,7 +6,7 @@ import MessageItem from "./MessageItem";
 import MessageItemPoll from "./MessageItemPoll";
 
 type Props = {
-  messagesData: [Message];
+  messagesData: Message[];
 };
 
 function MessagesList({ messagesData }: Props) {
@@ -28,7 +28,7 @@ function MessagesList({ messagesData }: Props) {
     <List
       sx={{
         width: "100%",
-        maxWidth: 360,
+        maxWidth: 640,
         bgcolor: "background.paper",
       }}
     >

@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext } from "react";
 import { Waku } from "js-waku";
 
 const WakuContext = createContext({
-  waku: null,
+  waku: {} as Waku,
   ready: false,
 });
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function WakuContextProvider({ children }: Props) {
-  const [waku, setWaku] = useState<Waku>();
+  const [waku, setWaku] = useState<Waku>({} as Waku);
   const [ready, setReady] = useState(false);
 
   const context = {

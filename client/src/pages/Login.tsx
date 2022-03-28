@@ -22,6 +22,7 @@ function Login() {
     if (getSavedChannel() !== null) {
       navigate("/home");
     }
+    // eslint-disable-next-line
   }, []);
 
   /**
@@ -42,7 +43,7 @@ function Login() {
     );
     await web3Context.contract.methods
       .matchesCredentials(channel, password)
-      .call({ from: web3Context.accounts[0] }, (err, result) => {
+      .call({ from: web3Context.accounts[0] }, (err: Error, result: any) => {
         if (err !== null) {
           // Show err
           return;

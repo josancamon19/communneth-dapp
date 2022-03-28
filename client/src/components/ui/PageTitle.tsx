@@ -28,6 +28,8 @@ function PageTitle({ title }: Props) {
         onClick={(e) => {
           e.preventDefault();
           const channel = getSavedChannel();
+          console.log(`Sharing ${channel}`);
+          
           // TODO do whatsapp open for sending channel link to user
           // URL?
         }}

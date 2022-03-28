@@ -1,9 +1,10 @@
 import { Box, Container, ListItem, ListItemText } from "@mui/material";
-import { margin } from "@mui/system";
 import React from "react";
-import { Message, MessageProps } from "../../models/Messages";
+import { MessageProps } from "../../models/Messages";
 
 function MessageItem({ message, isSender }: MessageProps) {
+  console.log(isSender);
+
   return (
     <Container>
       <Box
@@ -18,7 +19,7 @@ function MessageItem({ message, isSender }: MessageProps) {
       >
         <ListItem
           key={message.sender + message.timestamp}
-          alignItems="flex-start"
+          alignItems={isSender ? "center" : "flex-start"}
           // alignItems={
           //   props.message.sender == props.web3Account
           //     ? "flex-end"
