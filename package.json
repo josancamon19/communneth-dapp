@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Joan Cabezas",
   "license": "ISC",
   "dependencies": {
     "@truffle/hdwallet-provider": "^2.0.4",

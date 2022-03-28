@@ -13,8 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { saveChannel } from "../utils/ChannelPersistance";
 
-function NewChannel(props) {
-  const [createdChannel, setCreatedChannel] = useState("");
+function NewChannel() {
+  const [createdChannel] = useState("");
   const navigate = useNavigate();
 
   const web3Context = useContext(Web3Context);
@@ -54,14 +54,11 @@ function NewChannel(props) {
       .toLowerCase()}/proto`;
 
     console.log(`Creating channel ${channel}`);
-    setCreatedChannel(channel);
-    console.log(createdChannel);
-    // TODO why created channel not being saved here?
 
     await web3Context.contract.methods
       .createChannel(channel, channelPath, password)
       .send({ from: web3Context.accounts[0] });
-
+    console.log(`Channel create request sent`);
     // TODO: show waiting for completion
   }
 

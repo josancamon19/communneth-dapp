@@ -6,8 +6,12 @@ const WakuContext = createContext({
   ready: false,
 });
 
-export function WakuContextProvider(props) {
-  const [waku, setWaku] = useState(null);
+type Props = {
+  children: React.ReactNode;
+};
+
+export function WakuContextProvider({ children }: Props) {
+  const [waku, setWaku] = useState<Waku>();
   const [ready, setReady] = useState(false);
 
   const context = {
@@ -35,9 +39,7 @@ export function WakuContextProvider(props) {
   }, []);
 
   return (
-    <WakuContext.Provider value={context}>
-      {props.children}
-    </WakuContext.Provider>
+    <WakuContext.Provider value={context}>{children}</WakuContext.Provider>
   );
 }
 

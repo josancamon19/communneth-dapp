@@ -13,47 +13,13 @@ import {
   removeSavedChannel,
 } from "../utils/ChannelPersistance";
 
-function Home(props) {
+// type Props = {
+//   channel: string;
+// };
+
+function Home() {
+  // { channel }: Props
   const navigate = useNavigate();
-  // let messages = [
-  //   {
-  //     id: 1,
-  //     sender: "0xB9638d21544809DaC95f00Aad1e9B1Cd3b07a260",
-  //     timestamp: 12311,
-  //     text: "Hi, today we will be discussing about the new pool.",
-  //     type: "basic",
-  //   },
-  //   {
-  //     id: 2,
-  //     sender: "0xB9638d21544809DaC95f00Aad1e9B1Cd3b07a262",
-  //     timestamp: 12312,
-  //     text: "Ohhh, for real?",
-  //     type: "basic",
-  //   },
-  //   {
-  //     id: 3,
-  //     sender: "0xB9638d21544809DaC95f00Aad1e9B1Cd3b07a263",
-  //     timestamp: 12313,
-  //     text: "Yup",
-  //     type: "basic",
-  //   },
-  //   {
-  //     id: 4,
-  //     sender: "0xB9638d21544809DaC95f00Aad1e9B1Cd3b07a264",
-  //     timestamp: 12314,
-  //     text: "Great so what is it?",
-  //     type: "basic",
-  //   },
-  //   {
-  //     id: 5,
-  //     sender: "0xB9638d21544809DaC95f00Aad1e9B1Cd3b07a264",
-  //     timestamp: 12315,
-  //     pollId: "koaskxaoqnoufpq123",
-  //     text: "How do we proceed?",
-  //     type: "poll",
-  //     options: ["Buy it now", "Start recollect", "Pay from reserves"],
-  //   },
-  // ];
   let [messages, wakuHistoryMessages] = useWakuMessagesHook();
 
   useEffect(() => {
@@ -61,7 +27,7 @@ function Home(props) {
       navigate("/");
     }
   }, []);
-
+  const channel = getSavedChannel();
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -72,7 +38,7 @@ function Home(props) {
           alignItems: "center",
         }}
       >
-        <PageTitle title={`Channel ${props.channel ?? "Test"}`} />
+        <PageTitle title={`Channel ${channel ?? "Test"}`} />
         <MessagesList messages={messages} />
         <NewMessage reloadMessages={wakuHistoryMessages} />
         <Grid container>
@@ -89,6 +55,7 @@ function Home(props) {
               sx={{
                 marginTop: 4,
                 color: "red",
+                marginBottom: 4,
               }}
             >
               Logout

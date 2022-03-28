@@ -3,7 +3,10 @@ import React from "react";
 import ShareRounded from "@mui/icons-material/ShareRounded";
 import { getSavedChannel } from "../../utils/ChannelPersistance";
 
-function PageTitle(props) {
+type Props = {
+  title: string;
+};
+function PageTitle({ title }: Props) {
   return (
     <Box
       component="div"
@@ -15,7 +18,7 @@ function PageTitle(props) {
       }}
     >
       <Typography variant="h6" component="h6">
-        {props.title}
+        {title}
       </Typography>
       {/* How to add margin here? */}
       <Button

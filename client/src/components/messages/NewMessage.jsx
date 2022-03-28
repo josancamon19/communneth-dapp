@@ -8,6 +8,7 @@ import Web3Context from "../../contexts/Web3Context";
 import { Button, Container, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import SendRounded from "@mui/icons-material/SendRounded";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import { getSavedChannel } from "../../utils/ChannelPersistance";
 
 function NewMessage(props) {
@@ -79,6 +80,17 @@ function NewMessage(props) {
               endIcon={<SendRounded />}
               size="large"
             />
+            {/* <Button
+              variant="outlined"
+              disabled={isSubmitting}
+              endIcon={<ArrowDropDownCircleIcon />}
+              size="large"
+              onClick={() => {
+                // TODO: Display drodpwn list for
+                // - Initiate Poll
+                // - Initiate Payment message
+              }}
+            /> */}
           </Box>
         )}
       </Formik>

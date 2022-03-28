@@ -36,7 +36,7 @@ function Login() {
    * @param {string} channel
    * @param {string} password
    */
-  async function handleSignIn(channel, password) {
+  async function handleSignIn(channel: string, password: string) {
     console.log(
       `Authenticating with channel: '${channel}' and password '${password}'`
     );
@@ -76,7 +76,7 @@ function Login() {
             password: "123",
           }}
           validate={(values) => {
-            const errors = {};
+            const errors = { channel: "", password: "" };
             if (values.channel === "") {
               errors.channel = "Channel field required";
             }

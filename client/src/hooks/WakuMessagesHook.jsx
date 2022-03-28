@@ -46,7 +46,6 @@ export function useWakuMessagesHook() {
     );
 
     const message = { text, timestamp, sender, messageType, amount };
-    console.log(message);
     if (alreadyExists === undefined) {
       setMessages((prev) => [message].concat(prev));
     }

@@ -10,8 +10,8 @@ const Web3Context = createContext({
 });
 
 export function Web3Provider(props) {
-  const [web3, setWeb3] = useState(null);
-  const [contract, setContract] = useState(null);
+  const [web3, setWeb3] = useState<web3>(null);
+  const [contract, setContract] = useState<web3.eth.Contract>(null);
   const [accounts, setAccounts] = useState([]);
 
   const context = {
