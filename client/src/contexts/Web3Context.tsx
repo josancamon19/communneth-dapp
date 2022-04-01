@@ -14,6 +14,7 @@ const Web3Context = createContext({
 type Props = {
   children: React.ReactNode;
 };
+
 export function Web3Provider({ children }: Props) {
   const [web3, setWeb3] = useState<Web3>({} as Web3);
   const [contract, setContract] = useState<Contract>({} as Contract);

@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+
 import Web3Context from "../contexts/Web3Context";
 import {
   Button,
@@ -10,9 +11,14 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import { Formik } from "formik";
+import { Formik, FormikErrors } from "formik";
 import { saveChannel } from "../utils/ChannelPersistance";
 import { EventData } from "web3-eth-contract";
+
+interface CreateChannelValues {
+  channel: string;
+  password: string;
+}
 
 function NewChannel() {
   const [createdChannel] = useState("");
@@ -24,13 +30,16 @@ function NewChannel() {
    * Listen for Channel created events ..
    */
   useEffect(() => {
-    if (web3Context.contract === null) return;
+    if (
+      web3Context.contract === null ||
+      web3Context.contract.events === undefined
+    )
+      return;
 
     web3Context.contract.events
       .ChannelCreated()
       .on("data", (event: EventData) => {
         console.log(`createdChannel ${createdChannel}`);
-        console.log(event.returnValues);
         if (event.returnValues.name === createdChannel) {
           saveChannel(createdChannel);
           navigate("/home");
@@ -50,12 +59,15 @@ function NewChannel() {
    * @returns null
    */
   async function createChannel(channel: string, password: string) {
-    if (channel === "") return;
+    console.log(channel, password);
 
-    const channelPath = `/communneth/1/${channel
+    if (channel === "") return;
+    const cleanedChannelStr = channel
       .toString()
       .replace(" ", "-")
-      .toLowerCase()}/proto`;
+      .toLowerCase();
+
+    const channelPath = `/communneth/1/${cleanedChannelStr}/proto`;
 
     console.log(`Creating channel ${channel}`);
 
@@ -66,6 +78,7 @@ function NewChannel() {
     // TODO: show waiting for completion
   }
 
+  const initialValues: CreateChannelValues = { channel: "", password: "" };
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -80,9 +93,10 @@ function NewChannel() {
           Create a channel
         </Typography>
         <Formik
-          initialValues={{ channel: "", password: "" }}
-          validate={(values) => {
-            const errors = { channel: "", password: "" };
+          initialValues={initialValues}
+          validate={(values: CreateChannelValues) => {
+            // const errors = { channel: "", password: "" };
+            let errors: FormikErrors<CreateChannelValues> = {};
             if (values.channel === "") {
               errors.channel = "Channel field required";
             }
@@ -91,9 +105,11 @@ function NewChannel() {
             }
             return errors;
           }}
-          onSubmit={async (values, { setSubmitting }) => {
-            await createChannel(values.channel, values.password);
-            setSubmitting(false);
+          onSubmit={(values: CreateChannelValues, actions) => {
+            console.log(values);
+            createChannel(values.channel, values.password).then(() => {
+              actions.setSubmitting(false);
+            });
           }}
         >
           {({
