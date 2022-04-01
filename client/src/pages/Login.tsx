@@ -10,11 +10,17 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
-import { Formik } from "formik";
+import { Formik, FormikErrors } from "formik";
 import Web3Context from "../contexts/Web3Context";
 import { saveChannel, getSavedChannel } from "../utils/ChannelPersistance";
+interface SignInFormValues {
+  channel: string;
+  password: string;
+}
 
 function Login() {
+  const initialValues: SignInFormValues = { channel: "/communneth/1/123/proto", password: "13" };
+
   const navigate = useNavigate();
   const web3Context = useContext(Web3Context);
 
@@ -72,12 +78,9 @@ function Login() {
           Sign in
         </Typography>
         <Formik
-          initialValues={{
-            channel: "/communneth/1/conjunto1/proto",
-            password: "123",
-          }}
-          validate={(values) => {
-            const errors = { channel: "", password: "" };
+          initialValues={initialValues}
+          validate={(values: SignInFormValues) => {
+            let errors: FormikErrors<SignInFormValues> = {};
             if (values.channel === "") {
               errors.channel = "Channel field required";
             }
@@ -92,9 +95,10 @@ function Login() {
 
             return errors;
           }}
-          onSubmit={async (values, { setSubmitting }) => {
-            await handleSignIn(values.channel, values.password);
-            setSubmitting(false);
+          onSubmit={(values: SignInFormValues, actions) => {
+            handleSignIn(values.channel, values.password).then(() => {
+              actions.setSubmitting(false);
+            });
           }}
         >
           {({

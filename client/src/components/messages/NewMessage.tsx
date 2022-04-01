@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import { proto } from "../../utils/ProtoUtils";
 import { WakuMessage } from "js-waku";
-import { Formik } from "formik";
+import { Formik, FormikErrors } from "formik";
 import WakuContext from "../../contexts/WakuContext";
 import Web3Context from "../../contexts/Web3Context";
 import { Button, Container, TextField } from "@mui/material";
@@ -10,11 +10,18 @@ import { Box } from "@mui/system";
 import SendRounded from "@mui/icons-material/SendRounded";
 import { getSavedChannel } from "../../utils/ChannelPersistance";
 
-function NewMessage(props) {
+interface MessageFormValues {
+  message: string;
+}
+
+function NewMessage() {
+  const initialValues: MessageFormValues = { message: "" };
   const wakuContext = useContext(WakuContext);
   const web3Context = useContext(Web3Context);
 
-  async function sendMessage(message) {
+  const channel = getSavedChannel();
+
+  async function sendMessage(message: string) {
     const data = {
       timestamp: new Date().getTime(),
       text: message,
@@ -23,7 +30,7 @@ function NewMessage(props) {
     };
 
     const payload = proto.Message.encode(data);
-    const msg = await WakuMessage.fromBytes(payload, getSavedChannel());
+    const msg = await WakuMessage.fromBytes(payload, `${channel}`);
     await wakuContext.waku.relay.send(msg);
   }
 
@@ -33,15 +40,18 @@ function NewMessage(props) {
   return (
     <Container>
       <Formik
-        initialValues={{ message: "" }}
-        validate={(values) => {
-          const errors = {};
+        initialValues={initialValues}
+        validate={(values: MessageFormValues) => {
+          let errors: FormikErrors<MessageFormValues> = {};
           if (values.message === "") {
             errors.message = "What's the message? 🤔 ";
           }
           return errors;
         }}
-        onSubmit={async (values, { setSubmitting, setValues }) => {
+        onSubmit={async (
+          values: MessageFormValues,
+          { setSubmitting, setValues }
+        ) => {
           await sendMessage(values.message);
           setSubmitting(false);
           setValues({ message: "" });

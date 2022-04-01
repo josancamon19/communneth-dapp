@@ -21,6 +21,8 @@ interface CreateChannelValues {
 }
 
 function NewChannel() {
+  const initialValues: CreateChannelValues = { channel: "", password: "" };
+
   const [createdChannel] = useState("");
   const navigate = useNavigate();
 
@@ -78,7 +80,6 @@ function NewChannel() {
     // TODO: show waiting for completion
   }
 
-  const initialValues: CreateChannelValues = { channel: "", password: "" };
   return (
     <Container component="main" maxWidth="xs">
       <Box

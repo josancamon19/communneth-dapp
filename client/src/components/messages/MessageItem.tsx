@@ -3,8 +3,6 @@ import React from "react";
 import { MessageProps } from "../../models/Messages";
 
 function MessageItem({ message, isSender }: MessageProps) {
-  console.log(isSender);
-
   return (
     <Container>
       <Box
